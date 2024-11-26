@@ -1,0 +1,5 @@
+CONVERT_TO = liatris
+ENCODER_ENABLE = yes
+ENCODER_MAP_ENABLE = yes
+# RGBLIGHT_ENABLE = yes
+
