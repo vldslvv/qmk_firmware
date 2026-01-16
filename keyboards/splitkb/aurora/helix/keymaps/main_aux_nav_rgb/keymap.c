@@ -46,8 +46,8 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
         KC_F1,   KC_F2,   KC_F3,   KC_F4,   KC_F5,   KC_F6,                     KC_F7,   KC_F8,   KC_F9,   KC_F10,  KC_F11,  KC_F12,
         KC_TRNS, QK_BOOT, KC_TRNS, EE_CLR,  KC_TRNS, KC_TRNS,                   KC_TRNS, QK_BOOT, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS,
         KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, AG_NORM,                   AG_SWAP, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, RM_TOGG,
-        KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_MUTE, KC_TRNS, KC_TRNS, RM_SPDU, RM_HUEU, RM_SATU, RM_VALU,
-        KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, RM_SPDD, RM_HUED, RM_SATD, RM_VALD
+        KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_MUTE, KC_TRNS, RM_FLGN, RM_SPDU, RM_HUEU, RM_SATU, RM_VALU,
+        KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, KC_TRNS, RM_FLGP, RM_SPDD, RM_HUED, RM_SATD, RM_VALD
     ),
 
     [_PRS] = LAYOUT(
@@ -103,7 +103,6 @@ void eeconfig_init_user(void) {
     rgb_matrix_sethsv(HSV_PURPLE);
 }
 
-
 // 0-5 are underglow LEDs
 // For left split, indices look like this:
 // 11 10  9  8  7  6
@@ -115,66 +114,42 @@ void eeconfig_init_user(void) {
 // either look into g_led_config or handedness
 // Also check this: https://docs.qmk.fm/features/rgb_matrix
 bool rgb_matrix_indicators_user(void) {
-    const uint8_t r = 255;
-    const uint8_t g = 255;
-    const uint8_t b = 255;
+    // White
+    const uint8_t r_caps = 255;
+    const uint8_t g_caps = 255;
+    const uint8_t b_caps = 255;
+
+    // Blue
+    const uint8_t r_prs = 255;
+    const uint8_t g_prs = 0;
+    const uint8_t b_prs = 0;
 
     if (host_keyboard_led_state().caps_lock) {
         // Highlight bottom row when capslock is pressed
-        rgb_matrix_set_color(37, r, g, b);
-        rgb_matrix_set_color(36, r, g, b);
-        rgb_matrix_set_color(35, r, g, b);
-        rgb_matrix_set_color(34, r, g, b);
-        rgb_matrix_set_color(33, r, g, b);
-        rgb_matrix_set_color(32, r, g, b);
-        rgb_matrix_set_color(31, r, g, b);
+        rgb_matrix_set_color(37, r_caps, g_caps, b_caps);
+        rgb_matrix_set_color(36, r_caps, g_caps, b_caps);
+        rgb_matrix_set_color(35, r_caps, g_caps, b_caps);
+        rgb_matrix_set_color(34, r_caps, g_caps, b_caps);
+        rgb_matrix_set_color(33, r_caps, g_caps, b_caps);
+        rgb_matrix_set_color(32, r_caps, g_caps, b_caps);
+        rgb_matrix_set_color(31, r_caps, g_caps, b_caps);
     }
+    uint8_t layer = get_highest_layer(layer_state);
+    if (layer == _PRS) {
+        // Highlight two top rows when persistent layer is active
+        rgb_matrix_set_color(11, r_prs, g_prs, b_prs);
+        rgb_matrix_set_color(10, r_prs, g_prs, b_prs);
+        rgb_matrix_set_color(9, r_prs, g_prs, b_prs);
+        rgb_matrix_set_color(8, r_prs, g_prs, b_prs);
+        rgb_matrix_set_color(7, r_prs, g_prs, b_prs);
+        rgb_matrix_set_color(6, r_prs, g_prs, b_prs);
+        rgb_matrix_set_color(17, r_prs, g_prs, b_prs);
+        rgb_matrix_set_color(16, r_prs, g_prs, b_prs);
+        rgb_matrix_set_color(15, r_prs, g_prs, b_prs);
+        rgb_matrix_set_color(14, r_prs, g_prs, b_prs);
+        rgb_matrix_set_color(13, r_prs, g_prs, b_prs);
+        rgb_matrix_set_color(12, r_prs, g_prs, b_prs);
+    }
+
     return false;
 }
-
-// // Light LEDs 9 & 10 in cyan when keyboard layer 1 (_AUX) is active
-// const rgblight_segment_t PROGMEM my_layer1_layer[] = RGBLIGHT_LAYER_SEGMENTS(
-//     {9, 2, HSV_CYAN}
-// );
-// // Light LEDs 11 & 12 in purple when keyboard layer 2 (_NAV) is active
-// const rgblight_segment_t PROGMEM my_layer2_layer[] = RGBLIGHT_LAYER_SEGMENTS(
-//     {11, 2, HSV_PURPLE}
-// );
-// // Light LEDs 13 & 14 in green when keyboard layer 3 (_RGB) is active
-// const rgblight_segment_t PROGMEM my_layer3_layer[] = RGBLIGHT_LAYER_SEGMENTS(
-//     {13, 2, HSV_GREEN}
-// );
-// // Light LEDs 0-5 in orange when keyboard layer 4 (_PERS) is active
-// const rgblight_segment_t PROGMEM my_layer4_layer[] = RGBLIGHT_LAYER_SEGMENTS(
-//     {0, 6, HSV_ORANGE}
-// );
-//
-// // Now define the array of layers. Later layers take precedence
-// const rgblight_segment_t* const PROGMEM my_rgb_layers[] = RGBLIGHT_LAYERS_LIST(
-//     my_capslock_layer,
-//     my_layer1_layer,    // Overrides caps lock layer
-//     my_layer2_layer,    // Overrides other layers
-//     my_layer3_layer,    // Overrides other layers
-//     my_layer4_layer     // Overrides other layers
-// );
-//
-// void keyboard_post_init_user(void) {
-//     // Enable the LED layers
-//     rgblight_layers = my_rgb_layers;
-// }
-//
-// // Layer state changed
-// layer_state_t layer_state_set_user(layer_state_t state) {
-//     // Both layers will light up if both kb layers are active
-//     rgblight_set_layer_state(1, layer_state_cmp(state, _AUX));
-//     rgblight_set_layer_state(2, layer_state_cmp(state, _NAV));
-//     rgblight_set_layer_state(3, layer_state_cmp(state, _RGB));
-//     rgblight_set_layer_state(4, layer_state_cmp(state, _PRS));
-//     return state;
-// }
-//
-// // LED update based on capslock state
-// bool led_update_user(led_t led_state) {
-//     rgblight_set_layer_state(0, led_state.caps_lock);
-//     return true;
-// }

@@ -18,9 +18,14 @@
 
 // Should solve the issue with RGB effects not propagating, but doesn't
 #define SPLIT_USB_DETECT
+#define SPLIT_USB_TIMEOUT 2500
+#define EE_HANDS
 
-// Should enable working with LED state for slave split of a keyboard
+// Mirrors caps lock and layer leds
+// TODO: look into how to properly split led keys
+// https://docs.qmk.fm/config_options#other-options
 #define SPLIT_LED_STATE_ENABLE
+#define SPLIT_LAYER_STATE_ENABLE
 
 #define ENCODER_RESOLUTION 2
 
